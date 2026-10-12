@@ -1,5 +1,8 @@
-
 name: Sync OKAPI to OCPL
+
+# Set to false to push commits directly to OCPL master.
+env:
+  CREATE_PULL_REQUEST: "true"
 
 on:
   push:
@@ -81,7 +84,34 @@ jobs:
           rm -rf ocpl-work-dir/okapi
           cp -a okapi ocpl-work-dir/okapi
 
+
+      - name: Commit and push to OCPL master
+        if: env.CREATE_PULL_REQUEST == 'false'
+        working-directory: ocpl-work-dir
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          SHORT_REVISION: ${{ steps.version.outputs.short_revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A -- okapi
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          message="Automatic OKAPI Project update - ver. ${VERSION} (rev. ${SHORT_REVISION})"
+
+          git commit -m "$message"
+          git push origin HEAD:master
+
       - name: Create or update Pull Request
+        if: env.CREATE_PULL_REQUEST == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.OCPL_PR_TOKEN }}
@@ -90,7 +120,7 @@ jobs:
           branch: automated/okapi-sync
           delete-branch: true
           add-paths: okapi
-          commit-message: "Update OKAPI to v${{ steps.version.outputs.version }}"
+          commit-message: "Automatic OKAPI Project update - ver. ${{ steps.version.outputs.version }} (rev. ${{ steps.version.outputs.short_revision }})"
           title: "Update OKAPI to v${{ steps.version.outputs.version }}"
           body: |
             This PR synchronizes the OKAPI directory with
