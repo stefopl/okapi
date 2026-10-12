@@ -1,0 +1,102 @@
+
+name: Sync OKAPI to OCPL
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-okapi-to-ocpl
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout OKAPI
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Checkout OCPL
+        uses: actions/checkout@v6
+        with:
+          repository: stefopl/opencaching-pl
+          ref: master
+          path: ocpl-work-dir
+          token: ${{ secrets.OCPL_PR_TOKEN }}
+
+      - name: Prepare OKAPI
+        id: version
+        shell: bash
+        env:
+          GIT_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          git_rev="${GIT_REVISION}"
+          git_rev_short="${git_rev:0:7}"
+
+          version_number=$(( $(git rev-list "${git_rev}" --count) + 318 ))
+
+          echo "version=${version_number}" >> "$GITHUB_OUTPUT"
+          echo "revision=${git_rev}" >> "$GITHUB_OUTPUT"
+          echo "short_revision=${git_rev_short}" >> "$GITHUB_OUTPUT"
+
+          python3 - "${version_number}" "${git_rev}" <<'PY'
+          import sys
+          from pathlib import Path
+
+          version_number = sys.argv[1]
+          git_revision = sys.argv[2]
+
+          path = Path("okapi/core/Okapi.php")
+          contents = path.read_text()
+
+          contents = contents.replace(
+              "private static $version_number = null;",
+              "private static $version_number = " + version_number + ";",
+          )
+          contents = contents.replace(
+              "private static $git_revision = null;",
+              "private static $git_revision = '" + git_revision + "';",
+          )
+
+          path.write_text(contents)
+          PY
+
+          echo "Prepared OKAPI version ${version_number}, revision ${git_rev_short}"
+
+      - name: Replace OKAPI in OCPL
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf ocpl-work-dir/okapi
+          cp -a okapi ocpl-work-dir/okapi
+
+      - name: Create or update Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.OCPL_PR_TOKEN }}
+          path: ocpl-work-dir
+          base: master
+          branch: automated/okapi-sync
+          delete-branch: true
+          add-paths: okapi
+          commit-message: "Update OKAPI to v${{ steps.version.outputs.version }}"
+          title: "Update OKAPI to v${{ steps.version.outputs.version }}"
+          body: |
+            This PR synchronizes the OKAPI directory with
+            stefopl/okapi master.
+
+            OKAPI version: ${{ steps.version.outputs.version }}
+            Source revision: ${{ steps.version.outputs.revision }}
+
+            Generated automatically by GitHub Actions.
