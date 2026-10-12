@@ -2,7 +2,7 @@ name: Sync OKAPI to OCPL
 
 # Set to false to push commits directly to OCPL master.
 env:
-  CREATE_PULL_REQUEST: "true"
+  CREATE_PULL_REQUEST: "false"
 
 on:
   push:
