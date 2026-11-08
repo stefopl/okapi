@@ -585,36 +585,43 @@ store these attributes in GPX <groundspeak:attribute> elements.
         <opencaching schema="OCRO" id="60" />
         <opencaching schema="OCUS" id="60" />
         <lang id="en">
-            <name>Garmin's wireless beacon</name>
+            <name>Wireless beacon</name>
             <desc>
-                Contains Garmin's wireless Chirp™ beacon.
+                Contains a wireless beacon or tag, such as a Garmin Chirp™,
+                an NFC or RFID tag, a Bluetooth Low Energy (BLE) beacon, or another
+                type of radio beacon.
             </desc>
         </lang>
         <lang id="pl">
-            <name>Beacon - Garmin Chirp</name>
+            <name>Nadajnik bezprzewodowy</name>
             <desc>
-                Skrzynka zawiera Beacon Garmin Chirp™.
+                Zawiera bezprzewodowy beacon lub znacznik, np. Garmin Chirp™,
+                znacznik NFC lub RFID, beacon Bluetooth Low Energy (BLE) albo inny
+                rodzaj radiowego znacznika.
             </desc>
         </lang>
         <lang id="de">
-            <name>Funksignal – Garmin Chirp</name>
+            <name>Drahtloser Beacon</name>
             <desc>
-                Zusammen mit dem Cache sind ein oder mehrere Garmin-Funksender
-                versteckt. Um den Cache zu finden, müssen die Funksignale empfangen
-                werden. Dazu wird ein passender Empfänger benötigt.
+                Enthält einen drahtlosen Beacon oder Transponder, zum
+                Beispiel einen Garmin Chirp™, einen NFC- oder RFID-Tag, einen
+                Bluetooth-Low-Energy-(BLE)-Beacon oder eine andere Art von Funkbake.
             </desc>
         </lang>
         <lang id="nl">
-            <name>Beacon - Garmin chirp</name>
+            <name>Draadloze beacon</name>
             <desc>
-                Deze cache is gemaakt met 1 of meer Garmins Chirp™ draadloze
-                zenders.
+                Bevat een draadloze beacon of tag, zoals een Garmin
+                Chirp™, een NFC- of RFID-tag, een Bluetooth Low Energy (BLE)-beacon
+                of een ander type radiobaken.
             </desc>
         </lang>
         <lang id="ro">
             <name>Baliză radio</name>
             <desc>
-                Baliză radio de tip Garmin Chirp™.
+                Conține o baliză radio sau un tag, precum Garmin Chirp™,
+                un tag NFC sau RFID, o baliză Bluetooth Low Energy (BLE) sau un alt
+                tip de baliză radio.
             </desc>
         </lang>
     </attr>
@@ -4362,6 +4369,30 @@ store these attributes in GPX <groundspeak:attribute> elements.
                 Zagadka online może zostać rozwiązana w domu, bez konieczności odwiedzania konkretnego miejsca.
                 Wszystkie niezbędne wskazówki są dostępne w opisie skrytki lub w ogólnodostępnych źródłach internetowych,
                 a rozwiązanie pozwala ustalić współrzędne finału.
+            </desc>
+        </lang>
+    </attr>
+
+    <attr acode="A104" categories="de-location">
+        <opencaching schema="OCPL" id="227"/>
+        <lang id="en">
+            <name>Cave or adit (mine tunnel)</name>
+            <desc>
+                The cache is hidden near a cave or an adit, or directly inside one.
+                The exact hiding location should be clearly specified in the cache description.
+                In the case of caves and adits that are difficult to access, appropriate attributes should also be enabled, such as "Dangerous",
+                "Flashlight required", "Special equipment required" or "Hidden within enclosed rooms" (if available),
+                to inform seekers about the conditions and requirements for reaching the cache.
+            </desc>
+        </lang>
+        <lang id="pl">
+            <name>Jaskinia lub sztolnia</name>
+            <desc>
+                Skrzynka jest ukryta w pobliżu jaskini lub sztolni albo bezpośrednio w jej wnętrzu.
+                Dokładne miejsce ukrycia powinno być jasno określone w opisie skrzynki.
+                W przypadku jaskiń i sztolni o utrudnionym dostępie należy dodatkowo włączyć odpowiednie atrybuty, np. „Niebezpieczna”,
+                „Potrzebna latarka”, „Wymagany dodatkowy sprzęt” lub „Ukryta w zamkniętych pomieszczeniach” (jeśli są dostępne),
+                aby poinformować poszukiwaczy o warunkach i wymaganiach związanych z dotarciem do skrytki.
             </desc>
         </lang>
     </attr>
